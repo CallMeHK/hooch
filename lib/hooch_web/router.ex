@@ -20,9 +20,11 @@ defmodule HoochWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", HoochWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", HoochWeb do
+    pipe_through :api
+
+    post "/record", RecordTiltEntry, :index
+  end
 
   # Enables LiveDashboard only for development
   #
