@@ -1,0 +1,38 @@
+<div class="add-beer-form">
+  <h3>Add a Beer</h3>
+
+  <div><label>Beer name</label></div>
+  <div>
+    <input type="text" class="smooth" placeholder="" type="text">
+  </div>
+  
+  <div><label>Version</label></div>
+  <div>
+    <input type="number" class="smooth" placeholder="" type="text">
+  </div>
+  
+  <div><label>Type</label></div>
+  <div>
+    <input type="text" class="smooth" placeholder="" type="text">
+  </div>
+  
+  <div><label>Description</label></div>
+  <div>
+    <textarea rows="3" class="smooth" placeholder=""></textarea>
+  </div>
+  
+  <div><label>Original Gravity</label></div>
+  <div>
+    <input type="text" class="smooth" placeholder="" type="text">
+  </div>
+
+  <div><label>Final Gravity</label></div>
+  <div>
+    <input type="text" class="smooth" placeholder="" type="text">
+  </div>
+
+  <div style="padding-top: 12px;">
+    <a class="btn smooth btn-a btn-sm">Add Beer</a>
+  </div>
+
+</div>

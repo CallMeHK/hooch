@@ -17,6 +17,10 @@ defmodule HoochWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    get "/now", NowController, :index
+    get "/all", AllController, :index
+    get "/add", AddController, :index
   end
 
   # Other scopes may use custom stacks.
@@ -24,6 +28,7 @@ defmodule HoochWeb.Router do
     pipe_through :api
 
     post "/record", RecordTiltEntry, :index
+    post "/add", AddController, :add_beer
   end
 
   # Enables LiveDashboard only for development

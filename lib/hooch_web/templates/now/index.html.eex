@@ -1,0 +1,33 @@
+<div class="m-container">
+  <h3>Active Beer: <%= @beer.name %></h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Key</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Version</td>
+        <td><%= @beer.version %></td>
+      </tr>
+      <tr>
+        <td>Type</td>
+        <td><%= @beer.type %></td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td><%= @beer.description %></td>
+      </tr>
+      <tr>
+        <td>Original Gravity</td>
+        <td><%= @beer.og %></td>
+      </tr>
+      <tr>
+        <td>Final Gravity</td>
+        <td><%= @beer.fg %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
