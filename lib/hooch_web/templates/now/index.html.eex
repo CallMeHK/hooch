@@ -25,7 +25,7 @@
         <td><%= @beer.og %></td>
       </tr>
       <tr>
-        <td>Final Gravity</td>
+        <td>Target Final Gravity</td>
         <td><%= @beer.fg %></td>
       </tr>
     </tbody>

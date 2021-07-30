@@ -3,36 +3,130 @@
 
   <div><label>Beer name</label></div>
   <div>
-    <input type="text" class="smooth" placeholder="" type="text">
+    <input id="bname" type="text" class="smooth" placeholder="" type="text">
   </div>
   
   <div><label>Version</label></div>
   <div>
-    <input type="number" class="smooth" placeholder="" type="text">
+    <input id="bversion" type="number" class="smooth" placeholder="" type="text">
   </div>
   
   <div><label>Type</label></div>
   <div>
-    <input type="text" class="smooth" placeholder="" type="text">
+    <input id="btype" type="text" class="smooth" placeholder="" type="text">
   </div>
   
   <div><label>Description</label></div>
   <div>
-    <textarea rows="3" class="smooth" placeholder=""></textarea>
+    <textarea  id="bdescription" rows="3" class="smooth" placeholder=""></textarea>
   </div>
   
   <div><label>Original Gravity</label></div>
   <div>
-    <input type="text" class="smooth" placeholder="" type="text">
+    <input id="bog" type="text" class="smooth" placeholder="" type="text">
   </div>
 
-  <div><label>Final Gravity</label></div>
+  <div><label>Target Final Gravity</label></div>
   <div>
-    <input type="text" class="smooth" placeholder="" type="text">
+    <input id="bfg" type="text" class="smooth" placeholder="" type="text">
+  </div>
+
+  <div>
+    <p id="bresponse"></p>
+    <p style="color: red" id="berrors"></p>
   </div>
 
   <div style="padding-top: 12px;">
-    <a class="btn smooth btn-a btn-sm">Add Beer</a>
+    <a id="bsubmit" class="btn smooth btn-a btn-sm" onclick="addBeer()">Add Beer</a>
   </div>
 
+  <script>
+    const $ = elt => document.querySelector(elt)
+
+    const form = {
+      get name() { return $('#bname') },
+      get version() { return $('#bversion') },
+      get type() { return $('#btype') },
+      get description() { return $('#bdescription') },
+      get og() { return $('#bog') },
+      get fg() { return $('#bfg') },
+      get response() { return $('#bresponse') },
+      get errors() { return $('#berrors') },
+    }
+
+    const state = {
+      successVal: null,
+      get success() {return this.successVal},
+      set success(msg) {
+        this.successVal = msg
+        if(!msg) form.response.innerText = ''
+        else form.response.innerText = msg
+      },
+      errorsVal: null,
+      get errors() {return errorsVal},
+      set errors(errors) {
+        this.errorsVal = errors
+        if(!errors) form.errors.innerText = ''
+        else {
+          const errorMessage = 'Invalid fields: ' + errors.join(', ')
+          form.errors.innerText = errorMessage
+        }
+      }
+    }
+
+    const setSuccess = value => { 
+      state.errors = null 
+      state.success = value
+    }
+
+    const setErrors = (...errors) => { 
+      state.success = null
+      state.errors = errors
+    }
+
+    const clearForm = () => {
+      form.name.value = ''
+      form.version.value = ''
+      form.type.value = ''
+      form.description.value = ''
+      form.og.value = ''
+      form.fg.value = ''
+    }
+
+    const addBeer = async () => {
+      const response = await fetch('/api/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.value,
+          version: form.version.value,
+          type: form.type.value,
+          description: form.description.value,
+          og: form.og.value,
+          fg: form.fg.value
+        })
+      })
+
+      const json = await response.json()
+
+      console.log(json)
+
+      if(json.success) {
+        setSuccess('New beer added.')
+        clearForm()
+        form.name.focus()
+      }
+      else {
+        setErrors(json.errors)
+      }
+    }
+
+    document.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        addBeer()
+        }
+      })
+
+  </script>
 </div>
