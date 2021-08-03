@@ -1,1 +1,31 @@
-<div>all</div>
+<div class="m-container">
+  <h3>All beers</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for beer <- @all_beers do %>
+        <tr>
+          <td><%= beer.name %></td>
+          <td><%= beer.type %></td>
+          <td>
+            <%= if beer.active do %> 
+              <span style="color: green">Active </span>
+              <%= else %> 
+              <a href='javascript:makeActiveHandler(<%= beer.id %>)'>Make Active</a>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <script>
+    const makeActiveHandler = id => {
+      console.log(id)
+    }
+  </script>
+</div>

@@ -9,8 +9,6 @@ defmodule HoochWeb.NowController do
       |> Repo.preload(:beer)
       |> Repo.preload(beer: :tilt_readings)
 
-    IO.inspect(active_beer)
-
     conn
     |> assign(:beer, active_beer)
     |> render("index.html")

@@ -23,4 +23,5 @@ defmodule Hooch.Beer do
   end
 
   def new(beer), do: %Hooch.Beer{} |> changeset(beer) |> Repo.insert()
+  def all(), do: Hooch.Beer |> Repo.all()
 end
