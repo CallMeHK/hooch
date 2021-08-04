@@ -28,21 +28,32 @@
         <td>Target Final Gravity</td>
         <td><%= @beer.fg %></td>
       </tr>
-
+      <tr>
+        <td>Target ABV</td>
+        <td><%= (@beer.og/1000 - @beer.fg/1000) * 131.25 |> Float.ceil(2) %>%</td>
+      </tr>
+      <tr>
+        <td>Current Gravity</td>
+        <td><%= @current_gravity %></td>
+      </tr>
+      <tr>
+        <td>Current Temp</td>
+        <td><%= @current_temp%></td>
+      </tr>
+      <%= if @current_gravity != "No readings" do %> 
         <tr>
-          <td>Current Gravity</td>
-          <td><%= @current_gravity %></td>
+          <td>Current ABV</td>
+        <td><%= (@beer.og/1000 - @current_gravity/1000) * 131.25 |> Float.ceil(2) %>%</td>
         </tr>
-        <tr>
-          <td>Current Temp</td>
-          <td><%= @current_temp%></td>
-        </tr>
+      <% end %>
     </tbody>
   </table>
 
   <%= if @current_gravity != "No readings" do %> 
     <h3>Specific Gravity vs Time</h3>
     <div id="gravity-chart"></div>
+    <h3>ABV vs Time</h3>
+    <div id="abv-chart"></div>
     <h3>Temp vs Time</h3>
     <div id="temp-chart"></div>
     <script>
@@ -52,13 +63,14 @@
       const temps = tiltReadings.map(r => r.temp)
 
       const gravityChartData = times.map((time, i) => ({ x: time, y: gravities[i] }))
+      const abvChartData = times.map((time, i) => ({ x: time, y: (( <%= @beer.og %>/1000 - gravities[i]/1000 ) * 131.25).toFixed(2) }))
       const tempChartData = times.map((time, i) => ({ x: time, y: temps[i] }))
 
       var gravityOptions = { chart: {
           type: 'line'
         },
         series: [{
-          name: 'sales',
+          name: 'Specific Gravity',
           data: gravityChartData
         }],
         xaxis: {
@@ -66,12 +78,23 @@
         }
       }
 
+      var abvOptions = { chart: {
+          type: 'line'
+        },
+        series: [{
+          name: 'ABV',
+          data: abvChartData
+        }],
+        xaxis: {
+          type: 'datetime'
+        }
+      }
 
       var tempOptions = { chart: {
           type: 'line'
         },
         series: [{
-          name: 'sales',
+          name: 'Temp',
           data: tempChartData
         }],
         xaxis: {
@@ -80,9 +103,11 @@
       }
 
       var gravityChart = new ApexCharts(document.querySelector("#gravity-chart"), gravityOptions);
+      var abvChart = new ApexCharts(document.querySelector("#abv-chart"), abvOptions);
       var tempChart = new ApexCharts(document.querySelector("#temp-chart"), tempOptions);
 
       gravityChart.render();
+      abvChart.render();
       tempChart.render();
     </script>
   <% end %>
