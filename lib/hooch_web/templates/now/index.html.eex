@@ -28,6 +28,62 @@
         <td>Target Final Gravity</td>
         <td><%= @beer.fg %></td>
       </tr>
+
+        <tr>
+          <td>Current Gravity</td>
+          <td><%= @current_gravity %></td>
+        </tr>
+        <tr>
+          <td>Current Temp</td>
+          <td><%= @current_temp%></td>
+        </tr>
     </tbody>
   </table>
+
+  <%= if @current_gravity != "No readings" do %> 
+    <h3>Specific Gravity vs Time</h3>
+    <div id="gravity-chart"></div>
+    <h3>Temp vs Time</h3>
+    <div id="temp-chart"></div>
+    <script>
+      const tiltReadings = <%= raw @tilt_readings |> Poison.encode() |> elem(1) %>
+      const gravities = tiltReadings.map(r => r.gravity)
+      const times = tiltReadings.map(r => new Date(r.time).getTime())
+      const temps = tiltReadings.map(r => r.temp)
+
+      const gravityChartData = times.map((time, i) => ({ x: time, y: gravities[i] }))
+      const tempChartData = times.map((time, i) => ({ x: time, y: temps[i] }))
+
+      var gravityOptions = { chart: {
+          type: 'line'
+        },
+        series: [{
+          name: 'sales',
+          data: gravityChartData
+        }],
+        xaxis: {
+          type: 'datetime'
+        }
+      }
+
+
+      var tempOptions = { chart: {
+          type: 'line'
+        },
+        series: [{
+          name: 'sales',
+          data: tempChartData
+        }],
+        xaxis: {
+          type: 'datetime'
+        }
+      }
+
+      var gravityChart = new ApexCharts(document.querySelector("#gravity-chart"), gravityOptions);
+      var tempChart = new ApexCharts(document.querySelector("#temp-chart"), tempOptions);
+
+      gravityChart.render();
+      tempChart.render();
+    </script>
+  <% end %>
 </div>

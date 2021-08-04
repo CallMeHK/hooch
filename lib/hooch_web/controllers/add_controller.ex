@@ -27,13 +27,6 @@ defmodule HoochWeb.AddController do
 
     {success, data} = Beer.changeset(%Beer{}, beer) |> Repo.insert()
 
-    IO.puts("----------------------")
-    IO.inspect(params)
-    IO.inspect(beer)
-    IO.puts("----------------------")
-    IO.inspect({success, data})
-    IO.puts("----------------------")
-
     case success do
       :ok ->
         conn |> json(%{success: true})

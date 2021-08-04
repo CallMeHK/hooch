@@ -12,10 +12,10 @@
         <tr>
           <td><%= beer.name %></td>
           <td><%= beer.type %></td>
-          <td>
+          <td id="beer-<%= beer.id %>">
             <%= if beer.active do %> 
               <span style="color: green">Active </span>
-              <%= else %> 
+              <% else %> 
               <a href='javascript:makeActiveHandler(<%= beer.id %>)'>Make Active</a>
             <% end %>
           </td>
@@ -24,8 +24,41 @@
     </tbody>
   </table>
   <script>
-    const makeActiveHandler = id => {
-      console.log(id)
+    const $ = elt => document.querySelector(elt)
+
+    const state = {
+      activeIdVal: <%= @active_beer_id %>,
+      get activeId() {
+        return activeIdVal
+      },
+      set activeId(id) {
+        const oldActiveId = '#beer-' + this.activeIdVal
+        const newActiveId = '#beer-' + id
+        
+        $(oldActiveId).innerHTML = `
+          <a href='javascript:makeActiveHandler(${this.activeIdVal})'>Make Active</a>
+        `
+        $(newActiveId).innerHTML = `
+          <span style="color: green">Active </span>
+        `
+
+        this.activeIdVal = id
+      }
+    }
+    const makeActiveHandler = async id => {
+      const response = await fetch('/api/set_active', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id
+        })
+      })
+
+      const json = await response.json()
+
+      console.log(json)
+
+      if(json.success) state.activeId = id
     }
   </script>
 </div>

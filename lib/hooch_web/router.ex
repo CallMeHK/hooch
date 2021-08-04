@@ -29,6 +29,7 @@ defmodule HoochWeb.Router do
 
     post "/record", RecordTiltEntry, :index
     post "/add", AddController, :add_beer
+    post "/set_active", AllController, :set_active
   end
 
   # Enables LiveDashboard only for development
